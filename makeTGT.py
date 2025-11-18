@@ -27,7 +27,7 @@ for bl in range(BN):
                 sequence.append(''.join(map(str, Or)))
 
     df = template.copy()
-    df['BN'] = bl
+    df['BN'] = bl + 1
     df['quartet_id'] = np.arange(len(df)) // 4
     df['sequence'] = pd.Series(sequence)
     shuffled_ids = np.random.permutation(df['quartet_id'].unique())
