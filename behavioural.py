@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 
 def make_alldat():
@@ -16,4 +17,5 @@ def make_alldat():
     labels_dict = {1: 'AAMA', 2: 'AARA', 3: 'AAAA'}
     data['Quartet'] = data.QuartetType.map(labels_dict)
     data['correct'] = data.numCorrectDigits == 5
+    data['ipi'] = np.diff(data[["reactionTime1","reactionTime2","reactionTime3","reactionTime4","reactionTime5"]])
     return data
