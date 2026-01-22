@@ -9,11 +9,11 @@ for bl in range(BN):
     nQuartets = template.shape[0] // 4
     sequence = []
     for q in range(nQuartets):
-        Or = np.array([np.random.randint(1, 5) for i in range(5)])
+        Or = np.array([np.random.randint(1, 6) for i in range(5)])
         Mo = Or.copy()
         choices = [x for x in range(1, 5) if x != Or[2]]
         Mo[2] = np.random.choice(choices)
-        Un = np.array([np.random.randint(1, 5) for i in range(5)])
+        Un = np.array([np.random.randint(1, 6) for i in range(5)])
         for i in range(4):
             nTrial = i + q * 4
             if i == 2:
