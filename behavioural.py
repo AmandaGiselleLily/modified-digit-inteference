@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 
-
 def make_alldat():
     # Load participant.tsv file
     Tid = ['102', '103', '104', '105', '106', '107']
@@ -19,3 +18,5 @@ def make_alldat():
     data['correct'] = data.numCorrectDigits == 5
     data['ipi'] = np.diff(data[["reactionTime1","reactionTime2","reactionTime3","reactionTime4","reactionTime5"]])
     return data
+
+
