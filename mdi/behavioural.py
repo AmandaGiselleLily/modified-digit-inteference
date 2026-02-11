@@ -17,9 +17,7 @@ def make_alldat():
         alldat.append(subj)
     data = pd.concat(alldat)
     labels_dict = {1: 'AAMA', 2: 'AARA', 3: 'AAAA'}
-    PosInQuartet_dict = {1: 'first', 2: 'second', 3: 'third', 4: 'forth'}
     data['Quartet'] = data.QuartetType.map(labels_dict)
-    #data['PosInQuartet'] = data.PosInQuartet.map(PosInQuartet_dict)
     data['correct'] = data.numCorrectDigits == 5
     RTs = data[["reactionTime1","reactionTime2","reactionTime3","reactionTime4","reactionTime5"]].to_numpy()
     data[['ipi1', 'ipi2', 'ipi3', 'ipi4']] = np.diff(RTs, axis=-1)
