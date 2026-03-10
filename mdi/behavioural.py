@@ -5,12 +5,13 @@ import globals as gl
 
 def make_alldat():
     # Load participant.tsv file
-    Tid = [100, 101]
+    Tid = [100,101,102]
     # Load and join the files
     alldat = []
-    for sid in Tid:
+    for s, sid in enumerate(Tid):
         print(f'Doing participant {sid}')
         subj = pd.read_csv(os.path.join(gl.baseDir, gl.behavDir, f"MDI0_{sid}.dat"), sep='\t')
+        subj['SN'] = s
         subj['SID'] = sid
         subj["PosInQuartet"] = (subj["TN"] - 1) % 4 + 1
         alldat.append(subj)
@@ -25,7 +26,6 @@ def make_alldat():
 if __name__ == "__main__":
     data = make_alldat()
     data.to_csv(os.path.join(gl.baseDir, gl.behavDir, 'MDI0_merged.csv'), index=False)
-
 
 
 
