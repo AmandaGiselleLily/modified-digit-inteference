@@ -5,7 +5,7 @@ import globals as gl
 
 def make_alldat():
     # Load participant.tsv file
-    Tid = [100,101,102]
+    Tid = [100, 101, 102, 104, 106]
     # Load and join the files
     alldat = []
     for s, sid in enumerate(Tid):
