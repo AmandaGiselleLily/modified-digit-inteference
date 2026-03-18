@@ -5,7 +5,7 @@ import globals as gl
 
 def make_alldat():
     # Load participant.tsv file
-    Tid = [100, 101, 102, 104, 106]
+    Tid = [100, 101, 102, 104, 106, 107]
     # Load and join the files
     alldat = []
     for s, sid in enumerate(Tid):
@@ -18,7 +18,8 @@ def make_alldat():
     data = pd.concat(alldat)
     labels_dict = {1: 'AAMA', 2: 'AARA', 3: 'AAAA'}
     data['Quartet'] = data.QuartetType.map(labels_dict)
-    data['correct'] = data.numCorrectDigits == 5
+    data['planError'] = data.reactionTime1 == 5
+    data['correct'] = (data.numCorrectDigits == 5) & (data.planError==False)
     RTs = data[["reactionTime1","reactionTime2","reactionTime3","reactionTime4","reactionTime5"]].to_numpy()
     data[['ipi1', 'ipi2', 'ipi3', 'ipi4']] = np.diff(RTs, axis=-1)
     return data
