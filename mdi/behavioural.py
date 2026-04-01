@@ -5,7 +5,7 @@ import globals as gl
 
 def make_alldat():
     # Load participant.tsv file
-    Tid = [100, 101, 102, 104, 106, 107]
+    Tid = [100, 101, 102, 104, 106, 107,109]
     # Load and join the files
     alldat = []
     for s, sid in enumerate(Tid):
@@ -26,7 +26,7 @@ def make_alldat():
 
 if __name__ == "__main__":
     data = make_alldat()
-    data.to_csv(os.path.join(gl.baseDir, gl.behavDir, 'MDI0_merged.csv'), index=False)
+    data.to_csv('/home/alily/Documents/GitHub/modified-digit-inteference/mdi/MDI0_merged.csv', index=False)
 
 
 
