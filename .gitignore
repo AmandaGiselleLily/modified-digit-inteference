@@ -2,5 +2,5 @@ venv/
 .venv/
 .idea/
 .DS_Store
-target/
+target/mdi_*.tgt
 __pychache__/
