@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 
-sn = 110  # only thing to change
+sn = 130  # only thing to change
 BN = 10
 
 for bl in range(BN):
@@ -38,4 +38,4 @@ for bl in range(BN):
     df['QuartetType'] = df_shuffled['QuartetType']
     df['sequence'] = df_shuffled['sequence']
     df = df.drop(columns='quartet_id')
-    df.to_csv(f'target/mdi_{sn}_run{bl+1}.tgt', sep='\t', index=False)
+    df.to_csv(f'/cifs/diedrichsen/data/ModifiedDigitInterference/target/mdi_{sn}_run{bl+1}.tgt', sep='\t', index=False)
