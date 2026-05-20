@@ -5,7 +5,7 @@ import globals as gl
 
 def make_alldat():
     # Load participant.tsv file
-    Tid = [100, 101, 102, 104, 106, 107,109,110,111,112,113,114,115,116,117,118,120]
+    Tid = [100, 101, 102, 103, 104, 106, 107, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122]
     # Load and join the files
     alldat = []
     for s, sid in enumerate(Tid):
@@ -24,9 +24,23 @@ def make_alldat():
     data[['ipi1', 'ipi2', 'ipi3', 'ipi4']] = np.diff(RTs, axis=-1)
     return data
 
-if __name__ == "__main__":
-    data = make_alldat()
-    data.to_csv('/home/UWO/arivet3/Documents/GitHub/modified-digit-inteference/mdi/MDI0_merged1.csv', index=False)
+# def function for substract mean
 
+if __name__ == "__main__":
+
+    data = make_alldat()
+
+    # make file with one row per trial
+    data.to_csv(os.path.join(gl.baseDir, gl.behavDir, 'MDI0_alltrials.csv'), index=False)
+
+    # make file with one row per participant per condition
+    data_correct = data[(data.correct==1)]
+    data_correct['MovementTimeDM'] = data_correct['MovementTime'] - data_correct.groupby('SID')['MovementTime'].transform('mean')
+    mean = data_correct.groupby('SID')['MovementTime'].mean(numeric_only=True).mean()
+    data_g_median = data_correct.groupby(['SID', 'PosInQuartet', 'Quartet']).median(numeric_only=True).reset_index()
+    data_g_median['MovementTimeDM'] += mean
+    data_g_median.to_csv(os.path.join(gl.baseDir, gl.behavDir, 'MDI0_MT_median.csv'))
+
+    # make MDI0_IPI_median.csv
 
 
