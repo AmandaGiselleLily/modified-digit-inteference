@@ -3,6 +3,38 @@ import numpy as np
 import os
 import globals as gl
 
+
+def demean_column(data, column, groupby):
+    """
+    Demean a column within groups, preserving the grand mean.
+
+    Subtracts each group's mean from the column values (within-subject centering),
+    then adds back the grand mean so the overall scale is retained. The result is
+    stored in a new column named `<column>DM`.
+
+    Parameters
+    ----------
+    data : pd.DataFrame
+        Input dataframe.
+    column : str
+        Name of the column to demean.
+    groupby : str or list of str
+        Column(s) to group by when computing within-group means (e.g. 'SID').
+
+    Returns
+    -------
+    pd.DataFrame
+        Copy of `data` with an additional `<column>DM` column containing the
+        demeaned values.
+    """
+    data_out = data.copy()
+    mean = data.groupby(groupby)[column].mean(numeric_only=True).mean()
+    data_out[f'{column}DM'] = data_out[column] - data_out.groupby(groupby)[column].transform('mean') 
+    data_out[f'{column}DM'] += mean
+
+    return data_out
+
+
 def make_alldat():
     # Load participant.tsv file
     Tid = [100, 101, 102, 103, 104, 106, 107, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122]
@@ -33,14 +65,15 @@ if __name__ == "__main__":
     # make file with one row per trial
     data.to_csv(os.path.join(gl.baseDir, gl.behavDir, 'MDI0_alltrials.csv'), index=False)
 
-    # make file with one row per participant per condition
+    # make MT file with one row per participant per condition
     data_correct = data[(data.correct==1)]
-    data_correct['MovementTimeDM'] = data_correct['MovementTime'] - data_correct.groupby('SID')['MovementTime'].transform('mean')
-    mean = data_correct.groupby('SID')['MovementTime'].mean(numeric_only=True).mean()
-    data_g_median = data_correct.groupby(['SID', 'PosInQuartet', 'Quartet']).median(numeric_only=True).reset_index()
-    data_g_median['MovementTimeDM'] += mean
-    data_g_median.to_csv(os.path.join(gl.baseDir, gl.behavDir, 'MDI0_MT_median.csv'))
+    data_g = data_correct.groupby(['SID', 'PosInQuartet', 'Quartet']).median(numeric_only=True).reset_index()
+    data_g_demean = demean_column(data_g, column='MovementTime', groupby='SID')
+    data_g_demean.to_csv(os.path.join(gl.baseDir, gl.behavDir, 'MDI0_MT_median.csv'))
 
-    # make MDI0_IPI_median.csv
-
+    # make IPI file with one row per participant per condition
+    melted_ipi = data_correct.melt(id_vars=["Quartet", 'SID', 'PosInQuartet', 'TN', 'BN'],value_vars=["ipi1","ipi2","ipi3","ipi4"], value_name="IPI", var_name="IPI_id")
+    melted_ipi_g = melted_ipi.groupby(['SID', 'PosInQuartet', 'Quartet', 'IPI_id']).median(numeric_only=True).reset_index()
+    melted_ipi_g_demean = demean_column(melted_ipi_g, column='IPI', groupby='SID')
+    melted_ipi_g_demean.to_csv(os.path.join(gl.baseDir, gl.behavDir, 'MDI0_IPI_median.csv'))
 
